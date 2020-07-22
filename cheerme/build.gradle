@@ -1,0 +1,80 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+
+apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'com.jfrog.bintray'
+
+apply plugin: 'kotlin-kapt'
+
+ext {
+    bintrayRepo = 'cheerme' // Name of the Bintray repo you created
+    bintrayName = 'com.cheerme:cheerme' // Bintray package name
+
+    publishedGroupId = 'com.cheerme' // Group ID of the SDK which will be added in implementation line of gradle
+    artifact = 'cheerme' // Artifact ID of the SDK which will be added in implementation line of gradle
+    libraryVersion = '0.0.7' // Version of the library you created in Bintray
+
+    libraryName = 'Cheerme' // It is generally the module name
+    libraryDescription = 'A loyalty program to deliver meaningful experiences to your customers and foster their loyalty by gifting them points for any online actions, including placing an order, signing up, and celebrating a birthday.'
+
+    gitUrl = 'https://github.com/beyond-root-dev/Cheerme-Android.git'
+
+    developerName = 'Cheerme'
+    developerEmail = '23cheerme@gmail.com'
+
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+
+    //Bintray Credentials
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+    bintrayUsername = properties.getProperty('BINTRAY_USERNAME')
+    bintrayUserOrg = properties.getProperty('BINTRAY_ORG')
+    bintrayApiKey = properties.getProperty('BINTRAY_API_KEY')
+}
+
+android {
+    compileSdkVersion 29
+    buildToolsVersion "29.0.3"
+    tasks.withType(Javadoc).all { enabled = false }
+
+    defaultConfig {
+        minSdkVersion 19
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles 'consumer-rules.pro'
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    testImplementation 'junit:junit:4.12'
+    implementation 'com.google.android.material:material:1.1.0'
+
+    implementation 'com.squareup.retrofit2:retrofit:2.5.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.12.1'
+
+    implementation 'com.squareup.picasso:picasso:2.71828'
+}
+apply from: 'bintray.script'
